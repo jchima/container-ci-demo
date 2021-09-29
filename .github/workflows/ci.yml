@@ -38,6 +38,7 @@ jobs:
         run: |
           ./mvnw clean install
           mv target/container-ci-demo-0.0.1-SNAPSHOT.jar target/container-ci-demo.jar
+        
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -45,20 +46,20 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
         
-      - name: Login to DockerHub
-        uses: docker/login-action@v1 
+      -  
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
         with:
-          image: container-ci-demo/container-ci-demo
-          registry: docker.pkg.github.com
-          username: ${{ secrets.GITHUBUSER }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
           password: ${{ secrets.GITHUBPASSWORD }}
       -
         name: Build and push
-        #id: docker_build
         uses: docker/build-push-action@v2
         with:
+          context: .
           push: true
-          tags: jchima/container-ci-demo:latest
+          tags: user/app:latest
         
       # Runs a set of commands using the runners shell
       #- name: Build and Push Docker Image
