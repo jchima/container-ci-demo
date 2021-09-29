@@ -52,6 +52,13 @@ jobs:
           registry: docker.pkg.github.com
           username: ${{ secrets.GITHUBUSER }}
           password: ${{ secrets.GITHUBPASSWORD }}
+      -
+        name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: jchima/container-ci-demo:latest
         
       # Runs a set of commands using the runners shell
       #- name: Build and Push Docker Image
