@@ -43,7 +43,7 @@ jobs:
       - name: Build and Push Docker Image
         uses: mr-smithers-excellent/docker-build-push@v4
         with:
-          image: jchima/container-ci-demo
-          registry: docker.pkg.github.com/jchima/container-ci-demo
+          image: container-ci-demo
+          registry: docker.pkg.github.com
           username: ${{ secrets.GITHUBUSER }}
           password: ${{ secrets.GITHUBPASSWORD }}
