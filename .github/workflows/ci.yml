@@ -58,8 +58,9 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v2
         with:
+          context: .
           push: true
-          tags: user/app:latest
+          tags: jchima/container-ci-demo:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
       -
