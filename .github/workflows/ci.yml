@@ -41,7 +41,8 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Build and Push Docker Image
-        uses: mr-smithers-excellent/docker-build-push@v4
+        uses: docker/build-push-action@v2
+        #uses: mr-smithers-excellent/docker-build-push@v4
         with:
           image: container-ci-demo/container-ci-demo
           registry: docker.pkg.github.com
