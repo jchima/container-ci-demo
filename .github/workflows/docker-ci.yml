@@ -50,11 +50,15 @@ jobs:
       - name: Run tests with Maven
         run: mvn -B test --file pom.xml
         
-      # Runs a single command using the runners shell
-      #- name: Package app with Maven
-        #run: |
-         # ./mvnw clean install
-        #  mv target/container-ci-demo-0.0.1-SNAPSHOT.jar target/container-ci-demo.jar
+      - name: Application Version
+        id: version
+        uses: paulhatch/semantic-version@v4.0.2
+        with:
+          tag_prefix: "v"
+          change_path: "src/main"
+          major_pattern: "(MAJOR-DB)"
+          minor_pattern: "(MINOR-DB)"
+          namespace: container-ci-demo
       -
         name: Publish Dockerize App to GitHub Packages
         uses: docker/build-push-action@v1
@@ -64,15 +68,6 @@ jobs:
           registry: docker.pkg.github.com
           repository: ${{ github.repository }}/container-ci-demo
           tags: latest, ${{ github.run_number }}
-      - name: Application Version
-        id: version
-        uses: paulhatch/semantic-version@v4.0.2
-        with:
-          tag_prefix: "v"
-          change_path: "src/main"
-          major_pattern: "(MAJOR-DB)"
-          minor_pattern: "(MINOR-DB)"
-          namespace: ci-demo
       #-
         #name: Slack Notification
         #uses: rtCamp/action-slack-notify@v2
