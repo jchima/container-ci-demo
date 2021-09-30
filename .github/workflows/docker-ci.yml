@@ -35,6 +35,12 @@ jobs:
       - name: Grant execute permission for mvnw
         run: chmod +x mvnw
       
+      # Runs a single command using the runners shell
+      - name: Package app with Maven
+        run: |
+          ./mvnw clean install
+          mv target/container-ci-demo-0.0.1-SNAPSHOT.jar target/container-ci-demo.jar
+      
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
