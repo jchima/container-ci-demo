@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Dockerize Springboot App
 
 # Controls when the workflow will run
 on:
@@ -41,37 +41,14 @@ jobs:
           ./mvnw clean install
           mv target/container-ci-demo-0.0.1-SNAPSHOT.jar target/container-ci-demo.jar
       -
-        name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
+        name: Publish to GitHub Packages
+        uses: docker/build-push-action@v1
         with:
-          images: container-ci-demo/container-ci-demo
-      #-
-        #name: Set up QEMU
-        #uses: docker/setup-qemu-action@v1
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-        
-      -  
-        name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          #username: ${{ github.actor }}
-          username: ${{ secrets.GITHUBUSER }}
-          password: ${{ secrets.GITHUBPASSWORD }}
-      -
-        name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          #context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          label: ${{ steps.meta.outputs.labels }}
-          #cache-from: type=local,src=/tmp/.buildx-cache
-          #cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: ${{ github.repository }}/container-ci-demo
+          tags: latest, ${{ github.run_number }}
       #-
         # Temp fix
         # https://github.com/docker/build-push-action/issues/252
