@@ -69,7 +69,7 @@ jobs:
         uses: paulhatch/semantic-version@v4.0.2
         with:
           tag_prefix: "v"
-          change_path: "src/*"
+          change_path: "src/main"
           major_pattern: "(MAJOR-DB)"
           minor_pattern: "(MINOR-DB)"
           namespace: ci-demo
