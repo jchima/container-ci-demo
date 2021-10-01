@@ -41,24 +41,14 @@ jobs:
           ./mvnw clean install
           mv target/container-ci-demo-0.0.1-SNAPSHOT.jar target/container-ci-demo.jar
       
-      #- name: Cache Maven packages
-        #uses: actions/cache@v2
-        #with:
-          #path: ~/.m2
-          #key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          #restore-keys: ${{ runner.os }}-m2
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
       - name: Run tests with Maven
         run: mvn -B test --file pom.xml
-        
-      #- name: Application Version
-        #id: version
-        #uses: paulhatch/semantic-version@v4.0.2
-        #with:
-          #tag_prefix: "v"
-          #change_path: "src/main"
-          #major_pattern: "(MAJOR-DB)"
-          #minor_pattern: "(MINOR-DB)"
-          #namespace: container-ci-demo
       -
         name: Publish Dockerize App to GitHub Packages
         uses: docker/build-push-action@v1
