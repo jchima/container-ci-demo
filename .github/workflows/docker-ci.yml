@@ -87,12 +87,12 @@ jobs:
         #uses: qcastel/github-actions-maven-release@container-demo
         #with:
           #access-token: ${{ secrets.GITHUB_TOKEN }}
-      #-
-        #name: Slack Notification
-        #uses: rtCamp/action-slack-notify@v2
-        #env:
-          #SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          #SLACK_MESSAGE: Job completed successfully.
+      -
+        name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_MESSAGE: Job for Release ${{ steps.tag_version.outputs.new_tag }} completed successfully.
       #-
         # Temp fix
         # https://github.com/docker/build-push-action/issues/252
