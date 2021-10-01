@@ -57,13 +57,18 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
           repository: ${{ github.repository }}/container-ci-demo
-          tags: latest, ${{ steps.tag_version.outputs.new_tag }}
+          tags: latest, ${{ github.run_number }}
           
       - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v5
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+        uses: anothrNick/github-tag-action@1.26.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+      #- name: Bump version and push tag
+        #id: tag_version
+        #uses: mathieudutour/github-tag-action@v5
+        #with:
+          #github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create a GitHub Semantic release
         uses: actions/create-release@v1
