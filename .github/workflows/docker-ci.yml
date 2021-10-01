@@ -70,7 +70,7 @@ jobs:
           tags: latest, ${{ github.run_number }}
           
       - name: Release
-        uses: qcastel/github-actions-maven-release@master
+        uses: qcastel/github-actions-maven-release@main
         with:
           access-token: ${{ secrets.GITHUB_TOKEN }}
       #-
