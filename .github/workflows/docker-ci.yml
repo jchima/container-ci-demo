@@ -69,10 +69,24 @@ jobs:
           repository: ${{ github.repository }}/container-ci-demo
           tags: latest, ${{ github.run_number }}
           
-      - name: Release
-        uses: qcastel/github-actions-maven-release@container-demo
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v5
         with:
-          access-token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create a GitHub release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          release_name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}   
+      #- name: Release
+        #uses: qcastel/github-actions-maven-release@container-demo
+        #with:
+          #access-token: ${{ secrets.GITHUB_TOKEN }}
       #-
         #name: Slack Notification
         #uses: rtCamp/action-slack-notify@v2
