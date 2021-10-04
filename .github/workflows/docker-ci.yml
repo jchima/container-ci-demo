@@ -49,64 +49,22 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Run tests with Maven
         run: mvn -B test --file pom.xml
-      -
-        name: Publish Dockerize App to GitHub Packages
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          registry: docker.pkg.github.com
-          repository: ${{ github.repository }}/container-ci-demo
-          tags: latest, ${{ github.run_number }}
-          
-      - name: Bump version and push tag
-        id: tag_version
-        uses: anothrNick/github-tag-action@1.26.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: true
-      #- name: Bump version and push tag
-        #id: tag_version
-        #uses: mathieudutour/github-tag-action@v5
-        #with:
-          #github_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/setup-buildx-action@v1
+        name: Set up Docker Buildx
 
-      - name: Create a GitHub Semantic release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Docker meta
+        id: docker_meta
+        uses: crazy-max/ghaction-docker-meta@v1
         with:
-          tag_name: ${{ steps.tag_version.outputs.new_tag }}
-          release_name: ${{ steps.tag_version.outputs.new_tag }}
-          #tag_name: ${{ steps.tag_version.outputs.new_tag }}
-          #release_name: ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}   
-          
-      #- name: Release
-        #uses: qcastel/github-actions-maven-release@container-demo
-        #with:
-          #access-token: ${{ secrets.GITHUB_TOKEN }}
-      #-
-        #name: Slack Notification
-        #uses: rtCamp/action-slack-notify@v2
-        #env:
-          #SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          #SLACK_MESSAGE: Job for Release ${{ steps.tag_version.outputs.new_tag }} completed successfully.
-      #-
-        # Temp fix
-        # https://github.com/docker/build-push-action/issues/252
-        # https://github.com/moby/buildkit/issues/1896
-        #name: Move cache
-        #run: |
-          #rm -rf /tmp/.buildx-cache
-          #mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-        
-      # Runs a set of commands using the runners shell
-      #- name: Build and Push Docker Image
-      #  uses: docker/build-push-action@v2
-       # #uses: mr-smithers-excellent/docker-build-push@v4
-       # with:
-       #   image: container-ci-demo/container-ci-demo
-        #  registry: docker.pkg.github.com
-         # username: ${{ secrets.GITHUBUSER }}
-         # password: ${{ secrets.GITHUBPASSWORD }}
+          images: l7r7/sample
+          tag-custom: latest
+          tag-semver: |
+            {{raw}}
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: false
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
