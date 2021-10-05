@@ -80,16 +80,13 @@ jobs:
         
       -
         name: Build and Push
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        uses: docker/build-push-action@v1
         with:
-          context: .
-          push: true
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
           repository: ${{ github.repository }}/container-ci-demo
-          tags: ${{ steps.tag_version.outputs.new_tag }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: latest, ${{ steps.tag_version.outputs.new_tag }}
       
       - name: Create a GitHub Semantic release
         uses: actions/create-release@v1
