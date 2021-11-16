@@ -34,7 +34,7 @@ jobs:
 
       - name: Grant execute permission for mvnw
         run: |
-          sudo apt install maven
+          sudo apt install maven -y
           chmod +x mvnw
       
       ## Runs a single command using the runners shell
