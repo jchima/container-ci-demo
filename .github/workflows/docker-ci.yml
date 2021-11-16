@@ -35,7 +35,7 @@ jobs:
       - name: Grant execute permission for mvnw
         run: chmod +x mvnw
       
-      # Runs a single command using the runners shell
+      ## Runs a single command using the runners shell
       - name: Package app with Maven
         run: |
           ./mvnw clean install
